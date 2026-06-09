@@ -1,0 +1,49 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE, SOCIALS } from '../consts';
+
+const pageDescription =
+	'Alwin Helor — Solana smart contract engineer. Anchor, Rust, and CPI integrations with major Solana protocols.';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title="About" description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>About</h1>
+			<p>
+				I'm {SITE_TITLE}, a Solana smart contract engineer with four years of
+				professional experience building on-chain programs. I work primarily in
+				Anchor and Rust, and I've shipped 15+ programs to mainnet.
+			</p>
+			<p>
+				Most of my work has been CPI-heavy: integrating with protocols like
+				Jupiter, Raydium, and Meteora, and building the kinds of systems those
+				integrations sit inside — staking programs, token launchpads, and NFT
+				programs. I care about the unglamorous parts: account ordering, the
+				security checks before a deploy, and the failure modes that only show up
+				on mainnet.
+			</p>
+			<p>
+				I'm based in Kerala, India, and work with teams remotely. Two of my
+				open-source projects are
+				<a href="https://github.com/Alwin24" target="_blank" rel="noopener noreferrer"
+					>on GitHub</a
+				>: a Jupiter-integrated DCA program and a USDC-reward staking program.
+			</p>
+			<p>
+				The best way to reach me is via
+				<a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>,
+				and my code lives on
+				<a href={SOCIALS.github} target="_blank" rel="noopener noreferrer">GitHub</a>.
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>

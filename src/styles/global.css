@@ -1,0 +1,197 @@
+/*
+  Minimal, near-monochrome stylesheet for a technical writing blog.
+  System font stack (no webfont download). Fully monochrome — color comes
+  only from code blocks; links are near-black with a subtle underline.
+*/
+
+:root {
+	--bg: #ffffff;
+	--text: #18181b; /* near-black body text */
+	--text-strong: #0a0a0a; /* headings */
+	--text-muted: #6b7280; /* dates, secondary text */
+	--border: #e5e7eb;
+	--rule: #cbd0d6; /* hairline used for link underlines */
+	--code-inline-bg: #f4f4f5;
+	--selection: #e4e6e9;
+
+	--font-sans:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+		sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+	--font-mono:
+		ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+		'Liberation Mono', monospace;
+
+	--content-width: 680px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	font-family: var(--font-sans);
+	margin: 0;
+	padding: 0;
+	background: var(--bg);
+	color: var(--text);
+	font-size: 18px;
+	line-height: 1.7;
+	text-align: left;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+::selection {
+	background: var(--selection);
+}
+
+main {
+	width: var(--content-width);
+	max-width: calc(100% - 2em);
+	margin: auto;
+	padding: 3em 1em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0 0 0.5rem 0;
+	color: var(--text-strong);
+	line-height: 1.25;
+	letter-spacing: -0.01em;
+	font-weight: 650;
+}
+h1 {
+	font-size: 2.25rem;
+}
+h2 {
+	font-size: 1.6rem;
+	margin-top: 2rem;
+}
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.5rem;
+}
+h4 {
+	font-size: 1.1rem;
+}
+
+p {
+	margin: 0 0 1.25em 0;
+}
+
+/* Content/prose links: near-black, subtle gray underline that darkens on hover. */
+a {
+	color: var(--text-strong);
+	text-decoration: underline;
+	text-decoration-color: var(--rule);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 2px;
+}
+a:hover {
+	color: var(--text-strong);
+	text-decoration-color: var(--text-strong);
+}
+
+strong,
+b {
+	font-weight: 650;
+	color: var(--text-strong);
+}
+
+ul,
+ol {
+	padding-left: 1.25em;
+}
+li {
+	margin-bottom: 0.4em;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 8px;
+}
+
+/* Inline code */
+code {
+	font-family: var(--font-mono);
+	font-size: 0.875em;
+	padding: 0.15em 0.4em;
+	background-color: var(--code-inline-bg);
+	border-radius: 4px;
+}
+
+/* Fenced code blocks (Shiki sets its own background/colors) */
+pre {
+	padding: 1.1em 1.25em;
+	border-radius: 8px;
+	overflow-x: auto;
+	font-size: 0.875rem;
+	line-height: 1.6;
+	margin: 0 0 1.5em 0;
+}
+pre > code {
+	all: unset;
+	font-family: var(--font-mono);
+}
+
+blockquote {
+	border-left: 3px solid var(--border);
+	padding: 0 0 0 1.25em;
+	margin: 0 0 1.25em 0;
+	color: var(--text-muted);
+}
+
+hr {
+	border: none;
+	border-top: 1px solid var(--border);
+	margin: 2.5em 0;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 1.5em;
+	font-size: 0.95em;
+}
+th,
+td {
+	border: 1px solid var(--border);
+	padding: 0.5em 0.75em;
+	text-align: left;
+}
+
+@media (max-width: 720px) {
+	body {
+		font-size: 17px;
+	}
+	main {
+		padding: 2em 1em;
+	}
+	h1 {
+		font-size: 1.9rem;
+	}
+}
+
+.sr-only {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	white-space: nowrap;
+}

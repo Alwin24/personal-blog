@@ -1,0 +1,51 @@
+---
+import { SITE_TITLE, SOCIALS } from '../consts';
+const year = new Date().getFullYear();
+---
+
+<footer>
+	<div class="inner">
+		<span>&copy; {year} {SITE_TITLE}</span>
+		<div class="links">
+			<a href={SOCIALS.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+			<a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+			<a href="/rss.xml">RSS</a>
+		</div>
+	</div>
+</footer>
+<style>
+	footer {
+		border-top: 1px solid var(--border);
+		margin-top: 4em;
+	}
+	.inner {
+		width: var(--content-width);
+		max-width: calc(100% - 2em);
+		margin: auto;
+		padding: 1.5em 1em;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1em;
+		color: var(--text-muted);
+		font-size: 0.9rem;
+	}
+	.links {
+		display: flex;
+		gap: 1.1em;
+	}
+	.links a {
+		color: var(--text-muted);
+		text-decoration: none;
+	}
+	.links a:hover {
+		color: var(--text-strong);
+	}
+	@media (max-width: 540px) {
+		.inner {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.6em;
+		}
+	}
+</style>
