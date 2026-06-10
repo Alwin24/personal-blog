@@ -1,7 +1,7 @@
 ---
 title: 'Starting this blog'
 description: 'A short note on what this blog is for: concrete, code-first writing about Solana smart contract development.'
-pubDate: '2026-06-10'
+pubDate: '2026-05-10'
 ---
 
 I build Solana smart contracts — Anchor and Rust, mostly CPI-heavy
