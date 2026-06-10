@@ -81,6 +81,48 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	.prose :global(p) {
 		margin-bottom: 1.25em;
 	}
+	/* Copy-to-clipboard button on code blocks (injected by the script below) */
+	.prose :global(.code-block) {
+		position: relative;
+	}
+	.prose :global(.code-block .copy-btn) {
+		position: absolute;
+		top: 0.6em;
+		right: 0.6em;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2em;
+		height: 2em;
+		padding: 0;
+		border: 1px solid rgba(255, 255, 255, 0.16);
+		border-radius: 6px;
+		background: rgba(255, 255, 255, 0.08);
+		color: #c9d1d9;
+		cursor: pointer;
+		opacity: 0;
+		transition: opacity 0.15s ease, background 0.15s ease;
+	}
+	.prose :global(.code-block:hover .copy-btn),
+	.prose :global(.copy-btn:focus-visible) {
+		opacity: 1;
+	}
+	.prose :global(.copy-btn:hover) {
+		background: rgba(255, 255, 255, 0.16);
+	}
+	.prose :global(.copy-btn.copied) {
+		color: #3fb950;
+	}
+	.prose :global(.copy-btn svg) {
+		width: 15px;
+		height: 15px;
+	}
+	/* Always show on touch devices, which have no hover */
+	@media (hover: none) {
+		.prose :global(.code-block .copy-btn) {
+			opacity: 1;
+		}
+	}
 	.post-footer {
 		margin-top: 3em;
 		padding-top: 1.5em;
@@ -95,3 +137,45 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		color: var(--text-strong);
 	}
 </style>
+
+<script>
+	const COPY = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M3.5 10.5h-1a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v1"/></svg>';
+	const CHECK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3.5 8.5l3 3 6-7"/></svg>';
+
+	document.querySelectorAll<HTMLPreElement>('.prose pre').forEach((pre) => {
+		const code = pre.querySelector('code');
+		if (!code) return;
+
+		// Wrap so the button stays pinned even when a wide line scrolls.
+		const wrapper = document.createElement('div');
+		wrapper.className = 'code-block';
+		pre.parentNode?.insertBefore(wrapper, pre);
+		wrapper.appendChild(pre);
+
+		const btn = document.createElement('button');
+		btn.type = 'button';
+		btn.className = 'copy-btn';
+		btn.setAttribute('aria-label', 'Copy code');
+		btn.innerHTML = COPY;
+
+		let timer: ReturnType<typeof setTimeout>;
+		btn.addEventListener('click', async () => {
+			try {
+				await navigator.clipboard.writeText(code.innerText);
+				btn.innerHTML = CHECK;
+				btn.classList.add('copied');
+				btn.setAttribute('aria-label', 'Copied');
+				clearTimeout(timer);
+				timer = setTimeout(() => {
+					btn.innerHTML = COPY;
+					btn.classList.remove('copied');
+					btn.setAttribute('aria-label', 'Copy code');
+				}, 1600);
+			} catch {
+				/* clipboard unavailable (insecure context) */
+			}
+		});
+
+		wrapper.appendChild(btn);
+	});
+</script>
