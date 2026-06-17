@@ -11,6 +11,18 @@ program invokes an existing one — account creation goes through the System
 program, token transfers through the Token program, and so on. Think of it as
 your program saying "I know a guy who can do this."
 
+<nav class="toc" aria-label="Contents">
+
+**On this page**
+
+- [The three methods](#the-three-methods) — helper crates, `declare_program!`, and bare metal
+- [Which method to use](#which-method-to-use) — the decision in three lines
+- [Signing CPIs as a PDA](#signing-cpis-as-a-pda-with-invoke_signed) — `invoke_signed` and signer seeds
+- [Walkthrough: Meteora DAMMv2](#walkthrough-cpi-into-meteora-dammv2) — `declare_program!` against a live pool
+- [Walkthrough: Jupiter](#walkthrough-cpi-into-jupiter) — `remaining_accounts` and the `is_signer` dance
+
+</nav>
+
 Every CPI comes down to three pieces of information:
 
 1. The **program ID** of the program to invoke.
@@ -22,14 +34,6 @@ chain. Hold onto this — it's the through-line for the rest of the post. The th
 methods below are just three levels of help in assembling these same three pieces.
 
 Everything here uses the Anchor framework.
-
-**Contents**
-
-- [The three methods](#the-three-methods) — helper crates, `declare_program!`, and bare metal
-- [Which method to use](#which-method-to-use) — the decision in three lines
-- [Signing CPIs as a PDA](#signing-cpis-as-a-pda-with-invoke_signed) — `invoke_signed` and signer seeds
-- [Walkthrough: Meteora DAMMv2](#walkthrough-cpi-into-meteora-dammv2) — `declare_program!` against a live pool
-- [Walkthrough: Jupiter](#walkthrough-cpi-into-jupiter) — `remaining_accounts` and the `is_signer` dance
 
 ## The three methods
 

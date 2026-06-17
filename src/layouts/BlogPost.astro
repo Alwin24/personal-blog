@@ -81,6 +81,35 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	.prose :global(p) {
 		margin-bottom: 1.25em;
 	}
+	/* "On this page" table of contents — a bordered card so first-time
+	   readers don't scroll past it. */
+	.prose :global(.toc) {
+		margin: 2em 0 2.5em;
+		padding: 1.1em 1.35em;
+		border: 1px solid var(--border);
+		border-left: 3px solid var(--text-strong);
+		border-radius: 8px;
+		background: #fafafa;
+	}
+	.prose :global(.toc p) {
+		margin: 0 0 0.6em;
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+	.prose :global(.toc ul) {
+		margin: 0;
+		padding-left: 1.1em;
+	}
+	.prose :global(.toc li) {
+		margin-bottom: 0.35em;
+		font-size: 0.95rem;
+	}
+	.prose :global(.toc li:last-child) {
+		margin-bottom: 0;
+	}
 	/* Copy-to-clipboard button on code blocks (injected by the script below) */
 	.prose :global(.code-block) {
 		position: relative;
