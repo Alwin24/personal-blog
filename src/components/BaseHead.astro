@@ -17,7 +17,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const { title, description, image = FallbackImage } = Astro.props;
 
 // Append the site name to page titles, except on pages that already are the site title (home).
-const pageTitle = title === SITE_TITLE ? title : `${title} — ${SITE_TITLE}`;
+const pageTitle = title === SITE_TITLE ? title : `${title} | ${SITE_TITLE}`;
 ---
 
 <!-- Global Metadata -->

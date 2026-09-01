@@ -2,7 +2,7 @@
 
 export const SITE_TITLE = 'Alwin Helor';
 export const SITE_DESCRIPTION =
-	'Notes on Solana smart contract development — Anchor, Rust, CPI integrations, and on-chain program design.';
+	'Notes on Solana smart contract development: Anchor, Rust, CPI integrations, and on-chain program design.';
 
 // Short tagline used on the home page, under the name.
 export const TAGLINE = 'Solana smart contract engineer';

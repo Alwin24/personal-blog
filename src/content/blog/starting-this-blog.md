@@ -4,7 +4,7 @@ description: 'A short note on what this blog is for: concrete, code-first writin
 pubDate: '2026-05-10'
 ---
 
-I build Solana smart contracts — Anchor and Rust, mostly CPI-heavy
+I build Solana smart contracts in Anchor and Rust, mostly CPI-heavy
 integrations with protocols like Jupiter, Raydium, and Meteora, plus
 staking systems, token launchpads, and NFT programs. Over four years and
 15-plus mainnet deployments, I've accumulated a set of patterns and a

@@ -1,13 +1,13 @@
 ---
 title: 'Three ways to CPI in Solana (and when to use each)'
-description: 'How to make a cross-program invocation (CPI) in Anchor — helper crates, declare_program!, or bare metal, when to use each, plus Meteora and Jupiter examples.'
+description: 'How to make a cross-program invocation (CPI) in Anchor: helper crates, declare_program!, or bare metal, when to use each, plus Meteora and Jupiter examples.'
 pubDate: '2026-05-11'
 draft: false
 ---
 
 CPI (Cross-Program Invocation) is how a Solana program calls another program's
 instruction from inside its own. Instead of reimplementing functionality, your
-program invokes an existing one — account creation goes through the System
+program invokes an existing one. Account creation goes through the System
 program, token transfers through the Token program, and so on. Think of it as
 your program saying "I know a guy who can do this."
 
@@ -15,11 +15,11 @@ your program saying "I know a guy who can do this."
 
 **On this page**
 
-- [The three methods](#the-three-methods) — helper crates, `declare_program!`, and bare metal
-- [Which method to use](#which-method-to-use) — the decision in three lines
-- [Signing CPIs as a PDA](#signing-cpis-as-a-pda-with-invoke_signed) — `invoke_signed` and signer seeds
-- [Walkthrough: Meteora DAMMv2](#walkthrough-cpi-into-meteora-dammv2) — `declare_program!` against a live pool
-- [Walkthrough: Jupiter](#walkthrough-cpi-into-jupiter) — `remaining_accounts` and the `is_signer` dance
+- [The three methods](#the-three-methods): helper crates, `declare_program!`, and bare metal
+- [Which method to use](#which-method-to-use): the decision in three lines
+- [Signing CPIs as a PDA](#signing-cpis-as-a-pda-with-invoke_signed): `invoke_signed` and signer seeds
+- [Walkthrough: Meteora DAMMv2](#walkthrough-cpi-into-meteora-dammv2): `declare_program!` against a live pool
+- [Walkthrough: Jupiter](#walkthrough-cpi-into-jupiter): `remaining_accounts` and the `is_signer` dance
 
 </nav>
 
@@ -30,7 +30,7 @@ Every CPI comes down to three pieces of information:
 3. The **data** to pass.
 
 With those three things you can invoke any instruction of any program on the
-chain. Hold onto this — it's the through-line for the rest of the post. The three
+chain. Hold onto this. It's the through-line for the rest of the post. The three
 methods below are just three levels of help in assembling these same three pieces.
 
 Everything here uses the Anchor framework.
@@ -40,7 +40,7 @@ Everything here uses the Anchor framework.
 Methods 1 and 2 are convenience wrappers. Under the hood they both produce the
 same raw `(program ID, accounts, data)` that method 3 builds by hand.
 
-### Method 1 — Helper crates
+### Method 1: Helper crates
 
 The most common programs ship Rust crates with the account structs and
 instruction builders already implemented. Here's a token transfer from one
@@ -69,7 +69,7 @@ transfer(
 
 Two things to watch with helper crates. They can fall behind if they aren't
 actively maintained, and the crate version has to line up with your Anchor
-version — for `anchor-spl`, match `anchor-lang` and enable the `idl-build`
+version. For `anchor-spl`, match `anchor-lang` and enable the `idl-build`
 feature:
 
 ```toml
@@ -77,7 +77,7 @@ feature:
 idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 ```
 
-### Method 2 — The `declare_program!` macro
+### Method 2: The `declare_program!` macro
 
 This method needs the target program's IDL, which you can usually pull from
 Solscan or Solana Explorer. Drop the IDL in your `/idls` directory and the macro
@@ -110,10 +110,10 @@ use crate::jupiter::{
 The IDL must match the deployed program. If it doesn't, the transaction fails at
 simulation or execution.
 
-### Method 3 — Bare metal
+### Method 3: Bare metal
 
-The crudest option: supply the three pieces yourself — program ID, accounts,
-data — with no helper structs. The previous two methods are wrappers over exactly
+The crudest option: supply the three pieces yourself (program ID, accounts,
+and data) with no helper structs. The previous two methods are wrappers over exactly
 this. Here's the same token transfer, by hand:
 
 ```rust
@@ -162,11 +162,11 @@ reverse-engineer the accounts and data from it.
 ## Signing CPIs as a PDA with `invoke_signed`
 
 So far every CPI has been authorized by an account that signs the outer
-transaction — a user's keypair. But often the account that needs to authorize the
+transaction, typically a user's keypair. But often the account that needs to authorize the
 *inner* instruction is a PDA owned by your program: a vault that holds tokens, an
 authority over a mint, a position held on a user's behalf. PDAs have no private
 key, so they can't sign in the usual way. Instead, your program signs on the
-PDA's behalf by proving it can derive the address — it passes the PDA's **seeds
+PDA's behalf by proving it can derive the address. It passes the PDA's **seeds
 and bump**. That's the whole difference between `invoke` and `invoke_signed`: the
 signed variant takes those seeds. In Anchor it's `CpiContext::new_with_signer`
 instead of `CpiContext::new`; everything else about the call is identical.
@@ -200,7 +200,7 @@ transfer(
 The seeds you pass have to derive *exactly* the PDA you're claiming to sign for,
 bump included. The bump matters: a PDA address is only valid for one bump (the
 canonical one Anchor stores when it derives the account), and passing a different
-one derives a different address — one your program isn't authorized to sign for.
+one derives a different address, one your program isn't authorized to sign for.
 Get the seeds or the bump wrong and the runtime rejects the CPI with a missing-
 signature error, because the address you proved you can derive isn't the address
 the inner instruction expects to sign.
@@ -239,7 +239,7 @@ the IDL, the accounts fall into three groups:
 
 > **Gotcha:** for a PDA account you *can* type it as the generated type (e.g.
 > `Position`) instead of `AccountInfo`. But if the account is only initialized
-> *by the CPI itself*, that typing fails — at constraint-check time the account
+> *by the CPI itself*, that typing fails. At constraint-check time the account
 > doesn't exist yet and is still owned by the System program. Use `AccountInfo`
 > for accounts the inner program creates.
 
@@ -377,7 +377,7 @@ curious case. Its
 [IDL](https://solscan.io/account/JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4#programIdl)
 is published and works with `declare_program!`, but Method 2 alone doesn't get
 you there. As a DEX aggregator, Jupiter CPIs into whatever venues the route
-touches, and that route is decided off-chain — so the account list is variable
+touches, and that route is decided off-chain. So the account list is variable
 and there's no fixed `Accounts` struct to write. The answer is Methods 2 *and* 3
 together: generated types for the data, `remaining_accounts` for the variable
 accounts.
@@ -388,11 +388,11 @@ The flow:
 2. Pass the swap instruction's accounts as `remaining_accounts`, and its data as
    an instruction argument.
 3. Record the vault balances before swapping.
-4. CPI into Jupiter's swap with `invoke_signed` — the position PDA signs.
+4. CPI into Jupiter's swap with `invoke_signed`. The position PDA signs.
 5. Reload the vaults and assert the balance deltas are what you expected.
 
 Step 5 is the important one. You don't control Jupiter's internal routing, so
-don't trust it — verify the on-chain effect. Confirm that exactly the input you
+don't trust it. Verify the on-chain effect. Confirm that exactly the input you
 intended left the vault, and at least your minimum output arrived.
 
 Off-chain, decode the instruction Jupiter returns and fix up the account flags
@@ -405,8 +405,8 @@ export function decodeSwapIx(
 ): { remainingAccounts: AccountMeta[]; data: Buffer } {
   const remainingAccounts: AccountMeta[] = swapResponse.swapInstruction.accounts.map((a) => {
     const pubkey = new PublicKey(a.pubkey);
-    // Jupiter marks our PDA as a signer, but a PDA can't sign the outer tx —
-    // flip it to false here. We re-sign it inside the CPI instead.
+    // Jupiter marks our PDA as a signer, but a PDA can't sign the outer tx.
+    // Flip it to false here. We re-sign it inside the CPI instead.
     if (pubkey.equals(pdaSigner)) {
       return { pubkey, isWritable: true, isSigner: false };
     }
@@ -566,20 +566,20 @@ pub fn swap_on_jupiter<'info>(
 }
 ```
 
-> **Gotcha — the `is_signer` dance.** Jupiter's API hands back the swap
+> **Gotcha: the `is_signer` dance.** Jupiter's API hands back the swap
 > instruction with your PDA marked as a signer. Send that as-is and the
-> transaction is rejected before it runs — a PDA has no key to sign the outer
+> transaction is rejected before it runs. A PDA has no key to sign the outer
 > transaction. So off-chain you flip that account to `isSigner: false` (the
 > `decodeSwapIx` step). Then, inside the CPI, you flip it *back* to
-> `is_signer: true` in the `AccountMeta` you hand to `invoke_signed` — because at
+> `is_signer: true` in the `AccountMeta` you hand to `invoke_signed`, because at
 > that point your program is signing on the PDA's behalf with its seeds.
 > Off-chain false, on-chain true.
 
 ## Closing
 
-Every CPI is the same three pieces — program ID, accounts, data — and the three
+Every CPI is the same three pieces (program ID, accounts, data), and the three
 methods are just how much of that assembly you hand off. Reach for the lightest
 wrapper the target program supports: a helper crate if one exists,
 `declare_program!` if there's an IDL, bare metal only when you have to. Whatever
-method you pick, the work that's left is almost always the accounts — getting the
+method you pick, the work that's left is almost always the accounts: getting the
 right ones, in the right order, signed by the right authority.
